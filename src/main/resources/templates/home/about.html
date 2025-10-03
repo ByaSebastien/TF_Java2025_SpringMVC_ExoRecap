@@ -1,0 +1,24 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>À propos</title>
+
+    <th:block layout:fragment="pageHead">
+        <link rel="stylesheet" th:href="@{/css/home/about.css}">
+    </th:block>
+</head>
+<body>
+<main layout:fragment="content">
+    <div class="text-center">
+        <h1>À propos de notre boutique.</h1>
+        <p>Nous allons vous presser comme des citrons</p>
+        <img th:src="@{/images/logo.png}" class="img-fluid my-3" alt="Logo">
+    </div>
+</main>
+
+<th:block layout:fragment="pageScripts">
+    <script th:src="@{/js/home/about.js}"></script>
+</th:block>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<div th:fragment="toastContainer">
+    <div aria-live="polite" aria-atomic="true" class="position-fixed top-0 end-0 p-3" style="z-index: 1080;">
+        <div th:if="${toastMessage}"
+             class="toast align-items-center border-0"
+             th:classappend="
+                (${toastType} == 'success' ? ' text-bg-success' : '') +
+                (${toastType} == 'error' ? ' text-bg-danger' : '') +
+                (${toastType} == 'info' ? ' text-bg-info' : '') +
+                (${toastType} != 'success' and ${toastType} != 'error' and ${toastType} != 'info' ? ' text-bg-secondary' : '')"
+        role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="1000">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <span th:text="${toastMessage}"></span>
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+</div>

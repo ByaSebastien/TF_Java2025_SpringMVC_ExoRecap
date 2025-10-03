@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>Connexion</title>
+
+    <th:block layout:fragment="pageHead">
+        <link rel="stylesheet" th:href="@{/css/auth/login.css}">
+    </th:block>
+</head>
+<body>
+<main layout:fragment="content" class="container my-5">
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+
+            <h1 class="mb-4 text-center">Connexion</h1>
+
+            <form th:action="@{/login}" method="post">
+
+                <div class="mb-3">
+                    <label for="username" class="form-label">Email</label>
+                    <input type="text" name="username" class="form-control" id="username"
+                           placeholder="Votre email" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="password" class="form-label">Mot de passe</label>
+                    <input type="password" name="password" class="form-control" id="password"
+                           placeholder="********" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">Se connecter</button>
+            </form>
+
+            <div class="text-center mt-3">
+                <span>Pas encore de compte ?</span>
+                <a th:href="@{/register}">Créer un compte</a>
+            </div>
+
+        </div>
+    </div>
+
+</main>
+
+<th:block layout:fragment="pageScripts">
+    <script th:src="@{/js/auth/login.js}"></script>
+</th:block>
+</body>
+</html>

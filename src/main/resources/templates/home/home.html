@@ -1,0 +1,24 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>Accueil</title>
+
+    <th:block layout:fragment="pageHead">
+        <link rel="stylesheet" th:href="@{/css/home/home.css}">
+    </th:block>
+</head>
+<body>
+<main layout:fragment="content">
+    <div class="text-center">
+        <h1 class="display-4">Bienvenue sur notre boutique !</h1>
+        <p class="lead">Découvrez nos super produits.</p>
+        <a class="btn btn-primary btn-lg" th:href="@{/about}">En savoir plus</a>
+    </div>
+</main>
+
+<th:block layout:fragment="pageScripts">
+    <script th:src="@{/js/home/home.js}"></script>
+</th:block>
+</body>
+</html>
