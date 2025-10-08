@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>Détail produit</title>
+
+    <th:block layout:fragment="pageHead">
+        <link rel="stylesheet" th:href="@{/css/product/detail.css}">
+    </th:block>
+</head>
+<body>
+<main layout:fragment="content" class="container my-5">
+
+    <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+        <div class="row g-0 align-items-center">
+
+            <div class="col-md-5 bg-light text-center p-4">
+                <img th:if="${product.image != null}"
+                     th:src="@{${product.image}}"
+                     alt="Image du produit"
+                     class="img-fluid rounded-3 shadow-sm">
+                <div th:if="${product.image == null}" class="d-flex align-items-center justify-content-center h-100 text-muted">
+                    <span>Aucune image disponible</span>
+                </div>
+            </div>
+
+            <div class="col-md-7 p-5">
+                <h1 class="mb-3 fw-bold" th:text="${product.name}">Nom du produit</h1>
+
+                <h5 class="text-muted mb-4">
+                    Catégorie :
+                    <span class="fw-semibold" th:text="${product.category.name}">Nom catégorie</span>
+                </h5>
+
+                <p class="lead" th:text="${product.description != null ? product.description : 'Aucune description disponible.'}">
+                    Description du produit.
+                </p>
+
+                <div class="mt-5 d-flex gap-3 flex-wrap justify-content-end">
+                    <a th:href="@{/product}" class="btn btn-outline-secondary px-4">
+                        <i class="bi bi-arrow-left"></i> Retour
+                    </a>
+
+                    <a sec:authorize="hasAuthority('ADMIN')"
+                       th:href="@{/product/edit/{id}(id=${product.id()})}"
+                       class="btn btn-success px-4">
+                        <i class="bi bi-pencil-fill"></i> Modifier
+                    </a>
+
+                    <form sec:authorize="hasAuthority('ADMIN')"
+                          th:action="@{/product/delete/{id}(id=${product.id()})}"
+                          method="post"
+                          th:onsubmit="return confirm('Voulez-vous vraiment supprimer ce produit ?');"
+                          class="m-0">
+                        <button type="submit" class="btn btn-danger px-4">
+                            <i class="bi bi-trash-fill"></i> Supprimer
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<th:block layout:fragment="pageScripts">
+    <script th:src="@{/js/product/detail.js}"></script>
+</th:block>
+</body>
+</html>

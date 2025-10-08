@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>Modifier un produit</title>
+
+    <th:block layout:fragment="pageHead">
+        <link rel="stylesheet" th:href="@{/css/product/edit.css}">
+    </th:block>
+</head>
+<body>
+<main layout:fragment="content" class="container my-5">
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+
+            <h1 class="mb-4 text-center">Modifier le produit</h1>
+
+            <form th:action="@{|/product/edit/${id}|}" th:object="${form}" method="post"
+                  enctype="multipart/form-data" novalidate>
+
+                <div class="mb-3">
+                    <label for="name" class="form-label">Nom</label>
+                    <input type="text" th:field="*{name}" class="form-control" id="name"
+                           placeholder="Nom du produit">
+                    <div class="text-danger" th:if="${#fields.hasErrors('name')}"
+                         th:errors="*{name}"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea th:field="*{description}" class="form-control" id="description"
+                              rows="3" placeholder="Description du produit"></textarea>
+                    <div class="text-danger" th:if="${#fields.hasErrors('description')}"
+                         th:errors="*{description}"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="price" class="form-label">Prix (€)</label>
+                    <input type="number" th:field="*{price}" step="0.01" min="0" class="form-control" id="price"
+                           placeholder="0.00">
+                    <div class="text-danger" th:if="${#fields.hasErrors('price')}"
+                         th:errors="*{price}"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="categoryId" class="form-label">Catégorie</label>
+                    <select th:field="*{categoryId}" class="form-select" id="categoryId">
+                        <option value="">-- Sélectionnez une catégorie --</option>
+                        <option th:each="c : ${categories}"
+                                th:value="${c.id}"
+                                th:text="${c.name}"
+                                th:selected="${c.id == form.categoryId}">
+                        </option>
+                    </select>
+                    <div class="text-danger" th:if="${#fields.hasErrors('categoryId')}"
+                         th:errors="*{categoryId}"></div>
+                </div>
+
+                <div class="mb-3" th:if="${form.imageUrl != null}">
+                    <label class="form-label">Image actuelle</label>
+                    <div class="mb-2">
+                        <img th:src="@{${form.imageUrl}}" alt="Image produit"
+                             class="img-fluid rounded shadow-sm" style="max-height:200px;">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="image" class="form-label">Changer l'image</label>
+                    <input type="file" th:field="*{image}" class="form-control" id="image" accept="image/*">
+                    <div class="text-danger" th:if="${#fields.hasErrors('image')}"
+                         th:errors="*{image}"></div>
+                </div>
+
+                <div class="text-danger mb-3" th:if="${#fields.hasGlobalErrors()}">
+                    <p th:each="err : ${#fields.globalErrors()}" th:text="${err}"></p>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a th:href="@{/product}" class="btn btn-outline-secondary">Retour à la liste</a>
+                    <button type="submit" class="btn btn-primary">Mettre à jour</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</main>
+
+<th:block layout:fragment="pageScripts">
+    <script th:src="@{/js/product/edit.js}"></script>
+</th:block>
+</body>
+</html>

@@ -16,7 +16,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -25,7 +25,11 @@ public class SecurityConfig {
 
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(r -> r.anyRequest().permitAll())
+                .authorizeHttpRequests(r -> r
+                        .requestMatchers("/login").anonymous()
+                        .requestMatchers("/logout").authenticated()
+                        .anyRequest().permitAll()
+                )
                 .formLogin(c ->
                         c.loginPage("/login")
                                 .permitAll()

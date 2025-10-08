@@ -53,7 +53,6 @@ public class AuthController {
             model.addAttribute("toastMessage", e.getMessage());
             model.addAttribute("toastType", "error");
             return "auth/register";
-
         }
     }
 

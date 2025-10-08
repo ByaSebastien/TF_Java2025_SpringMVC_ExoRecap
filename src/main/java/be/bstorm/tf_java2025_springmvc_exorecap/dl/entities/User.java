@@ -38,6 +38,13 @@ public class User extends BaseEntity<Long> implements UserDetails {
         this.password = password;
     }
 
+    public User(String email, String login, String password, UserRole role) {
+        this.email = email;
+        this.login = login;
+        this.password = password;
+        this.role = role;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));

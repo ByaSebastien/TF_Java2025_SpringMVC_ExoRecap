@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <title>Catalogue produits</title>
+
+    <th:block layout:fragment="pageHead">
+        <link rel="stylesheet" th:href="@{/css/product/index.css}">
+    </th:block>
+</head>
+<body>
+<main layout:fragment="content" class="container my-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <h1 class="m-0">Catalogue produits</h1>
+
+        <a sec:authorize="hasAuthority('ADMIN')"
+           th:href="@{/product/create}"
+           class="btn btn-primary shadow-sm">
+            <i class="bi bi-plus-circle me-1"></i> Ajouter un produit
+        </a>
+    </div>
+
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body">
+            <form class="row g-3" th:action="@{/product}" method="get">
+
+                <input type="hidden" name="size" th:value="${param.size == null ? 10 : param.size}"/>
+
+                <div class="col-md-3">
+                    <label for="name" class="form-label">Nom</label>
+                    <input type="text" id="name" name="CONTAINS_name" class="form-control"
+                           th:value="${param.CONTAINS_name}" placeholder="Rechercher un produit...">
+                </div>
+
+                <div class="col-md-2">
+                    <label for="minPrice" class="form-label">Prix min</label>
+                    <input type="number" id="minPrice" name="GTE_price" class="form-control"
+                           th:value="${param.GTE_price}">
+                </div>
+
+                <div class="col-md-2">
+                    <label for="maxPrice" class="form-label">Prix max</label>
+                    <input type="number" id="maxPrice" name="LTE_price" class="form-control"
+                           th:value="${param.LTE_price}">
+                </div>
+
+                <div class="col-md-3">
+                    <label for="categoryId" class="form-label">Catégorie</label>
+                    <select id="categoryId" name="categoryId" class="form-select">
+                        <option value="">-- Toutes --</option>
+                        <option th:each="c : ${categories}"
+                                th:value="${c.id()}"
+                                th:text="${c.name()}"
+                                th:selected="${param.categoryId != null and param.categoryId[0] == c.id().toString()}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-outline-primary w-100">
+                        <i class="bi bi-search"></i> Filtrer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle mb-0">
+                <thead class="table-light">
+                <tr>
+                    <th>Nom</th>
+                    <th>Prix</th>
+                    <th>Catégorie</th>
+                    <th sec:authorize="hasAuthority('ADMIN')" class="text-center">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="p : ${pageDto.content()}"
+                    th:onclick="|window.location='@{/product/}'+${p.id}|"
+                    class="clickable align-middle">
+                    <td>
+                        <a th:href="@{/product/{id}(id=${p.id()})}" class="fw-semibold text-decoration-none">
+                            <i class="bi bi-box-seam me-1"></i> <span th:text="${p.name()}">Nom</span>
+                        </a>
+                    </td>
+                    <td th:text="${p.formattedPrice}">0 €</td>
+                    <td th:text="${p.category()}">Catégorie</td>
+                    <td sec:authorize="hasAuthority('ADMIN')">
+                        <div class="d-flex justify-content-center gap-2 flex-wrap">
+
+                            <a th:href="@{/product/edit/{id}(id=${p.id()})}"
+                               class="btn btn-outline-success btn-sm d-flex align-items-center gap-1 shadow-sm">
+                                <i class="bi bi-pencil-fill"></i> <span>Éditer</span>
+                            </a>
+
+                            <form th:action="@{/product/delete/{id}(id=${p.id()})}"
+                                  method="post"
+                                  th:onsubmit="return confirm('Voulez-vous vraiment supprimer ce produit ?');"
+                                  class="m-0">
+                                <button type="submit"
+                                        class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1 shadow-sm">
+                                    <i class="bi bi-trash-fill"></i> <span>Supprimer</span>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr th:if="${#lists.isEmpty(pageDto.content())}">
+                    <td colspan="4" class="text-center py-4 text-muted">
+                        <i class="bi bi-box"></i> Aucun produit trouvé
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="mt-4" th:replace="~{shared/fragments/pagination :: pagination(page=${pageDto}, url='/product')}"></div>
+
+</main>
+
+<th:block layout:fragment="pageScripts">
+    <script th:src="@{/js/product/index.js}"></script>
+</th:block>
+</body>
+</html>
